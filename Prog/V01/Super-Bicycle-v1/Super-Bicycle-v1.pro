@@ -6,13 +6,13 @@ CONFIG -= qt
 SOURCES += main.cpp \
     universe.cpp \
     creature.cpp \
-    neuronalsystem.cpp \
     scheduler.cpp \
-    event.cpp
+    event.cpp \
+    neuralsystem.cpp
 
 HEADERS += \
     universe.h \
     creature.h \
-    neuronalsystem.h \
     scheduler.h \
-    event.h
+    event.h \
+    neuralsystem.h
