@@ -1,25 +1,19 @@
-class Event:
-    def __init__(self, owner=owner, time=time):
-        self.owner = owner
-        Scheduler.register(self, time)
-
 class Scheduler:
     schedule = {}
+    time = 0
 
     @classmethod
-    def register(cls, event, time):
-        cls.schedule[event] = time
+    def register_event(cls, creature=None, dtime=0):
+        cls.schedule[creature] = cls.current_time + dtime
 
     @classmethod
-    def next_event(cls):
-        event, time = min(cls.schedule.items(), key=lambda item:item[1])
-        cls.schedule.pop(event)
-        self.current_time = time
-        return event
+    def next_creature(cls):
+        creature, time = min(cls.schedule.items(), key=lambda item:item[1])
+        cls.schedule.pop(creature)
+        cls.current_time = time
+        return creature
 
     def run(self):
-        self.initialize()  # Whatever it means
-
         while len(Scheduler.schedule) > 0 or current_time < MAX_CURRENT_TIME:
-            current_event = self.next_event()
-            current_event.owner.act()  # Prochaine action dans l'event ou dans la créature ?
+            current_creature = self.next_creature()
+            current_creature.act()  # Prochaine action dans l'event ou dans la créature ?
