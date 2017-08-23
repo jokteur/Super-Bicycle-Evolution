@@ -1,7 +1,10 @@
+import os
+import yaml
+
 from schedule import Schedule
 from creature import Creature
 
-MAX_CURRENT_TIME = 100
+MAX_CURRENT_TIME = 1000
 
 class Universe:
     creatures = []
@@ -31,6 +34,13 @@ class Universe:
 
 
 if __name__ == '__main__':
+    from numpy.random import rand
+
+    with open("python/universe_config.yml") as f:
+        univ_config = yaml.load(f)
+
+    Creature.config = univ_config["creatures"]
+
     universe = Universe()
     universe.run()
     print("Exited normally")

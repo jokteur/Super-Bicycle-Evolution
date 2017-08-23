@@ -1,0 +1,13 @@
+universe:
+  xsize : [0, 1000]
+  ysize : [0, 1000]
+creatures:
+  attributes:
+    attack :        [0, 10]
+    linear_speed :  [0, 10]
+    angular_speed : [0, 10]
+    HP_max :        [10, 100]
+    intel_speed :   [1, 10]
+    view_angle :    [0, 6]
+    view_distance : [0, 10]
+    reach :         [0, 10]
