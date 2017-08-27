@@ -1,0 +1,47 @@
+#include <iostream>
+
+using namespace std;
+
+class Event
+{
+  int _value ;
+  Event* _next ;
+
+public :
+  Event(int val, Event* ev=nullptr)
+  {
+    _value = val ;
+    _next = ev ;
+  }
+
+  int getValue()
+  {
+      return _value ;
+  }
+
+  Event next()
+  {
+      return _next ;
+  }
+} ;
+
+void print(const Event &event)
+{
+    cout << "Event with value " << event.getValue() ;
+}
+
+void println(const Event &event)
+{
+    print(event) ;
+    cout << endl ;
+}
+
+int main(int argc, char *argv[])
+{
+    Event e1 {32} ;
+    Event e2 {124, &e1} ;
+    println(e2) ;
+    println(e2.next()) ;
+    cout << "Hello World!" << endl ;
+    return 0 ;
+}
