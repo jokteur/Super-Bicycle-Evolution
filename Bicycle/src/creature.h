@@ -2,7 +2,7 @@
 #define CREATURE_H
 
 #include <cstdint>
-#include "neuralsystem.h"
+#include "ANN.h"
 
 class Creature
 {
@@ -22,7 +22,7 @@ private:
 
     //Other parameters
     uint32_t _lastActionTime;
-    NeuralSystem *_brain;
+    ANN *_brain;
 
 public:
     Creature();

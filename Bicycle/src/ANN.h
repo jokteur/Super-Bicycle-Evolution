@@ -6,6 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
+#include <random>
 
 #include <Eigen/Dense>
 
@@ -20,7 +21,7 @@ enum Fonction
 	SOFTMAX
 };
 
-class NeuralSystem
+class ANN
 {
 private:
 	uint8_t _numLayers;
@@ -29,23 +30,23 @@ private:
 	vector<MatrixXf> _signal;
     vector<MatrixXf> _weights;
 
-
-	MatrixXf binaryThreshold(MatrixXf value);
-	void sigmoid(MatrixXf & in);
-
-    float rectifiedLinear(float value);
-
+	//Number generation
+	std::default_random_engine _generator;
+	std::normal_distribution<float> *_distribution;
 public:
-	NeuralSystem(MatrixXf inputs, MatrixXf outputs, MatrixXf weights, Fonction outputFct);
-	NeuralSystem(MatrixXf inputs, MatrixXf outputs, Fonction outputFct);
+	ANN(MatrixXf inputs, MatrixXf outputs, MatrixXf weights, Fonction outputFct);
+	ANN(MatrixXf inputs, MatrixXf outputs, Fonction outputFct);
 
-
-	void addLayer(MatrixXf layer, MatrixXf weights, Fonction fct);
 	void addLayer(MatrixXf layer, Fonction fct);
 
     vector<MatrixXf> makeDecision(const MatrixXf& input);
     void displayNetwork();
 
+	void mutate(float sigma);
+
+	float Gaussian(float x);
 };
+
+ANN reproduceANN(const ANN &ANN1, const ANN &ANN2);
 
 #endif // NEURALSYSTEM_H
