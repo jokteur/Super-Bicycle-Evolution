@@ -8,26 +8,60 @@ class Creature
 
 };
 
+class Action
+{
+protected:
+    string _actionName = "Base action" ;
+    Creature _actor ;
+
+public:
+    virtual string getName()
+    {
+        return _actionName ;
+    }
+};
+
+class Waiting : public Action
+{
+public:
+    Waiting()
+    {
+        _actionName = "Waiting" ;
+    }
+};
+
+ostream& operator<< (ostream& out, Action& action)
+{
+    out << action.getName() ;
+    return out ;
+}
+
+
 class Event
 {
   float _time ;
-  Creature _actor ;
+  Action _action ;
   Event* _next ;
 
 public :
-  Event(float time, Creature actor, Event* next=nullptr)
+  Event(float time, Action& action, Event* next=nullptr)
   {
     _time = time ;
-    _actor = actor ;
+    _action = action ;
     _next = next ;
   }
 
-  int getScheduledTime()
+  float getScheduledTime()
   {
       return _time ;
   }
 
-  Event getNext()
+  Action& getAction()
+  {
+      return _action ;
+  }
+
+  Event& getNext()
   {
       return *_next ;
   }
@@ -44,24 +78,21 @@ public :
   }
 } ;
 
-void print(Event &event)
+ostream& operator<< (ostream& out, Event& event)
 {
-    cout << "Event (" << &event << ") with value " << event.getValue() << ". Next : " << event.getNextPtr() ;
-}
-
-void println(Event &event)
-{
-    print(event) ;
-    cout << endl ;
+    out << "Event (" << &event << ") schedules [" << event.getAction() << "] at time " << event.getScheduledTime() << ". " ;
+    out << "Next event : " << event.getNextPtr() ;
+    return out ;
 }
 
 int main(int argc, char *argv[])
 {
-    Event e1 {1} ;
-    Event e2 {2} ;
-    e1.insertNext(e2) ;
-    println(e1) ;
-    println(e2) ;
-
+    Action act = Action() ;
+    Waiting wait = Waiting() ;
+    Event event = Event(12, wait) ;
+    Event event2 = Event(33, act) ;
+    event.insertNext(event2) ;
+    cout << event << endl ;
+    cout << event.getNext() ;
     return 0 ;
 }
