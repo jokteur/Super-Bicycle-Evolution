@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
     signal.setZero() ;
 
-    for (int i = 0 ; i < 100000 ; i++)
+    for (int i = 0 ; i < 1000000 ; i++)
     {
         signal = (mat1 * signal + bias1).array().tanh() ;
         signal = (mat2 * signal + bias2).array().tanh() ;
