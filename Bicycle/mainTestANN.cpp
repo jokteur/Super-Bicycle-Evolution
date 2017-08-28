@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	brain.addLayer(MatrixXf::Random(height, 1), SIGMOID);
 
 	MatrixXf ar1 = MatrixXf::Random(height, 1);
-	
+
 	std::clock_t start;
 	double duration;
 
