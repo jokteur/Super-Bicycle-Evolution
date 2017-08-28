@@ -2,7 +2,7 @@
 #define CREATURE_H
 
 #include <cstdint>
-#include "neuralsystem.h"
+#include "ANN.h"
 
 class Creature
 {
@@ -35,7 +35,21 @@ private:
 
     //Other parameters
     uint32_t _lastActionTime;
-    NeuralSystem *_brain;
+    ANN *_brain;
+
+public:
+    Creature();
+    ~Creature();
+
+    void update();
+    void die();
+    bool loseHP(float hp); //Returns true if the creature died
+    void clone();
+    void reproduce();
+    void exportCreature();
+    void fct();
+
+
 };
 
 #endif // CREATURE_H
