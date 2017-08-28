@@ -7,12 +7,10 @@
 #include <iomanip>
 #include <cmath>
 
-#include <arrayfire.h>
+#include <Eigen/Dense>
 
-#include "../matrix.h"
-
-using namespace af;
 using namespace std;
+using namespace Eigen;
 
 enum Fonction
 {
@@ -27,25 +25,25 @@ class NeuralSystem
 private:
 	uint8_t _numLayers;
     vector<Fonction> _layersFctType;
-    vector<Matrix> _layers;
-	vector<Matrix> _signal;
-    vector<Matrix> _weights;
+    vector<MatrixXf> _layers;
+	vector<MatrixXf> _signal;
+    vector<MatrixXf> _weights;
 
 
-	Matrix binaryThreshold(Matrix value);
-	void sigmoid(Matrix & in);
+	MatrixXf binaryThreshold(MatrixXf value);
+	void sigmoid(MatrixXf & in);
 
     float rectifiedLinear(float value);
 
 public:
-	NeuralSystem(Matrix inputs, Matrix outputs, Matrix weights, Fonction outputFct);
-	NeuralSystem(Matrix inputs, Matrix outputs, Fonction outputFct);
+	NeuralSystem(MatrixXf inputs, MatrixXf outputs, MatrixXf weights, Fonction outputFct);
+	NeuralSystem(MatrixXf inputs, MatrixXf outputs, Fonction outputFct);
 
 
-	void addLayer(Matrix layer, Matrix weights, Fonction fct);
-	void addLayer(Matrix layer, Fonction fct);
+	void addLayer(MatrixXf layer, MatrixXf weights, Fonction fct);
+	void addLayer(MatrixXf layer, Fonction fct);
 
-    vector<Matrix> makeDecision(const Matrix& input);
+    vector<MatrixXf> makeDecision(const MatrixXf& input);
     void displayNetwork();
 
 };

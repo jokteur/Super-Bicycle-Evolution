@@ -1,17 +1,11 @@
 #include "neuralsystem.h"
 
-Matrix NeuralSystem::binaryThreshold(Matrix value)
-{
-	return 0.0f;
-}
-
-void NeuralSystem::sigmoid(Matrix &in)
+void NeuralSystem::sigmoid(MatrixXf &in)
 {
 	in = in;
 }
 
-
-NeuralSystem::NeuralSystem(Matrix inputs, Matrix outputs, Matrix weights, Fonction outputFct)
+NeuralSystem::NeuralSystem(MatrixXf inputs, MatrixXf outputs, MatrixXf weights, Fonction outputFct)
 {
 	_layers.push_back(inputs);
 	_signal.push_back(inputs);
@@ -25,7 +19,7 @@ NeuralSystem::NeuralSystem(Matrix inputs, Matrix outputs, Matrix weights, Foncti
 	_numLayers = 2;
 }
 
-NeuralSystem::NeuralSystem(Matrix inputs, Matrix outputs, Fonction outputFct)
+NeuralSystem::NeuralSystem(MatrixXf inputs, MatrixXf outputs, Fonction outputFct)
 {
 	_layers.push_back(inputs);
 	_signal.push_back(inputs);
@@ -33,7 +27,7 @@ NeuralSystem::NeuralSystem(Matrix inputs, Matrix outputs, Fonction outputFct)
 	_layers.push_back(outputs);
 	_signal.push_back(outputs);
 
-	Matrix weights = randUniform(-1, 1, outputs.size(), inputs.size());
+	MatrixXf weights = MatrixXf::Random(outputs.size(), inputs.size());
 	_weights.push_back(weights);
 
 	_layersFctType.push_back(outputFct);
@@ -41,18 +35,18 @@ NeuralSystem::NeuralSystem(Matrix inputs, Matrix outputs, Fonction outputFct)
 	_numLayers = 2;
 }
 
-void NeuralSystem::addLayer(Matrix layer, Fonction fct)
+void NeuralSystem::addLayer(MatrixXf layer, Fonction fct)
 {
-	Matrix output = _layers.back();
+	MatrixXf output = _layers.back();
 	Fonction outputFct = _layersFctType.back();
-	Matrix signalOutput = _signal.back();
+	MatrixXf signalOutput = _signal.back();
 
 	_layers.pop_back();
 	_signal.pop_back();
 	_weights.pop_back();
 
-	_weights.push_back(randUniform(-1, 1, layer.size(), _layers.back().size()));
-	_weights.push_back(randUniform(-1, 1, output.size(), layer.size()));
+	_weights.push_back(MatrixXf::Random(layer.size(), _layers.back().size()));
+	_weights.push_back(MatrixXf::Random(output.size(), layer.size()));
 	_layers.push_back(layer);
 	_signal.push_back(layer);
 	_layers.push_back(output);
@@ -63,7 +57,7 @@ void NeuralSystem::addLayer(Matrix layer, Fonction fct)
 	_numLayers++;
 }
 
-vector<Matrix> NeuralSystem::makeDecision(const Matrix& input)
+vector<MatrixXf> NeuralSystem::makeDecision(const MatrixXf& input)
 {
 	_signal[0] = input;
 	int j = 0;
@@ -73,7 +67,7 @@ vector<Matrix> NeuralSystem::makeDecision(const Matrix& input)
 		switch (_layersFctType[i])
 		{
 		case SIGMOID:
-			_signal[j] = mult(_weights[i], _layers[i]) + _layers[j];
+			_signal[j] = _weights[i] * _layers[i] + _layers[j];
 		}
 	}
 	return _signal;
