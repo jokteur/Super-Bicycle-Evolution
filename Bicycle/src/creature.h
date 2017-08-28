@@ -6,6 +6,19 @@
 
 class Creature
 {
+
+public:
+    Creature();
+    ~Creature();
+
+    void update();
+    void die();
+    bool loseHP(float hp); //Returns true if the creature died
+    void clone();
+    void reproduce();
+    void exportCreature();
+    void fct();
+
 private:
     //Fixed parameters
     float _attack;
@@ -23,20 +36,6 @@ private:
     //Other parameters
     uint32_t _lastActionTime;
     NeuralSystem *_brain;
-
-public:
-    Creature();
-    ~Creature();
-
-    void update();
-    void die();
-    bool loseHP(float hp); //Returns true if the creature died
-    void clone();
-    void reproduce();
-    void exportCreature();
-    void fct();
-
-
 };
 
 #endif // CREATURE_H

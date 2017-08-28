@@ -1,2 +1,6 @@
 
 GitIgnore/
+
+# Codeblocks project file
+*/*.cbd
+*/*.depend
