@@ -7,18 +7,6 @@
 class Creature
 {
 
-public:
-    Creature();
-    ~Creature();
-
-    void update();
-    void die();
-    bool loseHP(float hp); //Returns true if the creature died
-    void clone();
-    void reproduce();
-    void exportCreature();
-    void fct();
-
 private:
     //Fixed parameters
     float _attack;

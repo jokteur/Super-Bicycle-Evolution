@@ -1,17 +1,16 @@
 #include "action.h"
 
-Action::Action()
+BaseAction::BaseAction()
 {
     //ctor
 }
 
-Action::~Action()
+BaseAction::~BaseAction()
 {
     //dtor
 }
 
-
-virtual string Action::getName()
+string BaseAction::getName()
 {
     return _actionName ;
 }
@@ -21,7 +20,7 @@ Waiting::Waiting()
     _actionName = "Waiting" ;
 }
 
-ostream& operator<< (ostream& out, Action& action)
+ostream& operator<< (ostream& out, BaseAction& action)
 {
     out << action.getName() ;
     return out ;

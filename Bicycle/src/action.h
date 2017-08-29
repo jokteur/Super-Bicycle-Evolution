@@ -7,11 +7,11 @@ using namespace std ;
 
 #include "creature.h"
 
-class Action
+class BaseAction
 {
 public:
-    Action();
-    virtual ~Action();
+    BaseAction();
+    virtual ~BaseAction();
 
     virtual string getName() ;
 
@@ -22,12 +22,12 @@ private:
     Creature _actor ;
 };
 
-class Waiting : public Action
+class Waiting : public BaseAction
 {
 public:
     Waiting() ;
 };
 
-ostream& operator<< (ostream& out, Action& action) ;
+ostream& operator<< (ostream& out, BaseAction& action) ;
 
 #endif // ACTION_H

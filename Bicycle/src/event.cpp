@@ -1,6 +1,6 @@
 #include "event.h"
 
-Event::Event(float time, Action& action, Event* next=nullptr)
+Event::Event(float time, BaseAction& action, Event* next)
 {
     _time = time ;
     _action = action ;
@@ -12,7 +12,7 @@ float Event::getScheduledTime()
     return _time ;
 }
 
-Action& Event::getAction()
+BaseAction& Event::getAction()
 {
     return _action ;
 }
@@ -36,6 +36,6 @@ void Event::insertNextEvent(Event& newNext)
 ostream& operator<< (ostream& out, Event& event)
 {
     out << "Event (" << &event << ") schedules [" << event.getAction() << "] at time " << event.getScheduledTime() << ". " ;
-    out << "Next event : " << event.getNextPtr() ;
+    out << "Next event : " << event.getPtrToNext() ;
     return out ;
 }

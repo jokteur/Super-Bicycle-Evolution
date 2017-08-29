@@ -11,16 +11,17 @@ using namespace std ;
 class Event
 {
 public:
-    Event(float time, Action& action, Event* next=nullptr) ;
+    Event(float time, BaseAction& action, Event* next=nullptr) ;
+
     float getScheduledTime() ;
-    Action& getAction() ;
+    BaseAction& getAction() ;
     Event& getNextEvent() ;
     Event* getPtrToNext() ;
     void insertNextEvent(Event &newNext) ;
 
 private:
     float _time ;
-    Action _action ;
+    BaseAction _action ;
     Event* _next ;
 };
 

@@ -2,17 +2,18 @@
 #include <typeinfo>
 
 #include "src/event.h"
+#include "src/action.h"
 
 using namespace std ;
 
 int main(int argc, char *argv[])
 {
-    Action act = Action() ;
+    BaseAction act = BaseAction() ;
     Waiting wait = Waiting() ;
     Event event = Event(12, wait) ;
     Event event2 = Event(33, act) ;
-    event.insertNext(event2) ;
+    event.insertNextEvent(event2) ;
     cout << event << endl ;
-    cout << event.getNext() ;
+    cout << event.getNextEvent() ;
     return 0 ;
 }
