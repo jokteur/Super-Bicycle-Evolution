@@ -1,27 +1,31 @@
 #include "action.h"
 
 BaseAction::BaseAction()
-{
-    //ctor
-}
+{   }
+
+BaseAction::BaseAction(Creature& actor)
+    :_actor(actor)
+{   }
 
 BaseAction::~BaseAction()
+{   }
+
+string BaseAction::getDesc()
 {
-    //dtor
+    return "BaseAction" ;
 }
 
-string BaseAction::getName()
-{
-    return _actionName ;
-}
+Attacking::Attacking(Creature& attacker, Creature& defender)
+    :BaseAction(attacker), _defender(defender)
+{   }
 
-Waiting::Waiting()
+string Attacking::getDesc()
 {
-    _actionName = "Waiting" ;
+    return "Fuck you base !" ;
 }
 
 ostream& operator<< (ostream& out, BaseAction& action)
 {
-    out << action.getName() ;
+    cout << action.getDesc() ;
     return out ;
 }

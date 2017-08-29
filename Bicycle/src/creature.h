@@ -2,7 +2,10 @@
 #define CREATURE_H
 
 #include <cstdint>
+#include <iostream>
+
 #include "ANN.h"
+#include "typedef.h"
 
 class Creature
 {
@@ -22,7 +25,7 @@ private:
     float _HP;
 
     //Other parameters
-    uint32_t _lastActionTime;
+    global_time_t _lastActionTime;
     ANN *_brain;
 
 public:
@@ -39,5 +42,7 @@ public:
 
 
 };
+
+ostream& operator<< (ostream& out, Creature& creature) ;
 
 #endif // CREATURE_H

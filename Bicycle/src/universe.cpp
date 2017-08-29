@@ -1,6 +1,6 @@
 #include "universe.h"
 
-Universe::Universe()
+Universe::Universe(float sizeX, float sizeY)
 {
 
 }

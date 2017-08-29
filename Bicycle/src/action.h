@@ -10,22 +10,31 @@ using namespace std ;
 class BaseAction
 {
 public:
-    BaseAction();
+    BaseAction() ;
+    BaseAction(Creature& actor);
     virtual ~BaseAction();
 
-    virtual string getName() ;
+    virtual string getDesc() ;
 
 protected:
-    string _actionName = "Base action" ;
-
-private:
     Creature _actor ;
 };
 
 class Waiting : public BaseAction
+{   };
+
+class Attacking : public BaseAction
 {
 public:
-    Waiting() ;
+    Attacking(Creature& attacker, Creature& defender) ;
+
+    Creature getAttacker(){return _actor ;} ;
+    Creature getDefender(){return _defender;} ;
+
+    virtual string getDesc() ;
+
+protected:
+    Creature _defender ;
 };
 
 ostream& operator<< (ostream& out, BaseAction& action) ;

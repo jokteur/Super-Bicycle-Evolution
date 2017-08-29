@@ -40,3 +40,10 @@ void Creature::exportCreature()
 {
 
 }
+
+ostream& operator<< (ostream& out, Creature& creature)
+{
+    out << "Creature (" << &creature << ")" ;
+    return out ;
+}
+

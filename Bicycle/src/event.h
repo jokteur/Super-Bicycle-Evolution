@@ -1,26 +1,31 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include <cstdint>
 #include <iostream>
 
 using namespace std ;
 
 #include "action.h"
 #include "creature.h"
+#include "typedef.h"
 
 class Event
 {
 public:
-    Event(float time, BaseAction& action, Event* next=nullptr) ;
+    Event() ;
+    Event(global_time_t time, BaseAction& action, Event* next=nullptr) ;
 
-    float getScheduledTime() ;
-    BaseAction& getAction() ;
-    Event& getNextEvent() ;
-    Event* getPtrToNext() ;
-    void insertNextEvent(Event &newNext) ;
+    // Getters
+    global_time_t getScheduledTime(){return _time ;} ;
+    BaseAction& getAction(){return _action ;} ;
+    Event& getNextEvent(){return *_next ;} ;
+    Event* getPtrToNext(){return _next ;} ;
+
+    void insertEventAfter(Event &newNext) ;
 
 private:
-    float _time ;
+    global_time_t _time ;
     BaseAction _action ;
     Event* _next ;
 };

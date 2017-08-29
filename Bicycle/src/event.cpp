@@ -1,33 +1,13 @@
 #include "event.h"
 
-Event::Event(float time, BaseAction& action, Event* next)
-{
-    _time = time ;
-    _action = action ;
-    _next = next ;
-}
+Event::Event()
+{   }
 
-float Event::getScheduledTime()
-{
-    return _time ;
-}
+Event::Event(global_time_t time, BaseAction& action, Event* next)
+    :_time(time), _action(action), _next(next)
+{   }
 
-BaseAction& Event::getAction()
-{
-    return _action ;
-}
-
-Event& Event::getNextEvent()
-{
-    return *_next ;
-}
-
-Event* Event::getPtrToNext()
-{
-    return _next ;
-}
-
-void Event::insertNextEvent(Event& newNext)
+void Event::insertEventAfter(Event& newNext)
 {
       newNext._next = _next ;
       _next = &newNext ;
@@ -35,7 +15,7 @@ void Event::insertNextEvent(Event& newNext)
 
 ostream& operator<< (ostream& out, Event& event)
 {
-    out << "Event (" << &event << ") schedules [" << event.getAction() << "] at time " << event.getScheduledTime() << ". " ;
+    out << "Event (" << &event << ") scheduling [" << event.getAction() << "] at time " << event.getScheduledTime() << ". " ;
     out << "Next event : " << event.getPtrToNext() ;
     return out ;
 }
