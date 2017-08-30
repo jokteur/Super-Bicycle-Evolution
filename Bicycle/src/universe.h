@@ -10,8 +10,6 @@ using namespace std ;
 #include "event.h"
 #include "typedef.h"
 
-typedef
-
 class Universe
 {
 public:

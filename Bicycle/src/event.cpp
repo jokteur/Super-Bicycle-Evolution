@@ -4,7 +4,7 @@ Event::Event()
 {   }
 
 Event::Event(global_time_t time, BaseAction& action, Event* next)
-    :_time(time), _action(action), _next(next)
+    :_time(time), _action(&action), _next(next)
 {   }
 
 void Event::insertEventAfter(Event& newNext)
@@ -15,7 +15,7 @@ void Event::insertEventAfter(Event& newNext)
 
 ostream& operator<< (ostream& out, Event& event)
 {
-    out << "Event (" << &event << ") scheduling [" << event.getAction() << "] at time " << event.getScheduledTime() << ". " ;
+    out << "Event (" << &event << ") scheduling [" << event.getAction() << "] until " << event.getScheduledTime() << ". " ;
     out << "Next event : " << event.getPtrToNext() ;
     return out ;
 }

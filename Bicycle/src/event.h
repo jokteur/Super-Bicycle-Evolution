@@ -18,7 +18,7 @@ public:
 
     // Getters
     global_time_t getScheduledTime(){return _time ;} ;
-    BaseAction& getAction(){return _action ;} ;
+    BaseAction& getAction(){return *_action ;} ;
     Event& getNextEvent(){return *_next ;} ;
     Event* getPtrToNext(){return _next ;} ;
 
@@ -26,7 +26,7 @@ public:
 
 private:
     global_time_t _time ;
-    BaseAction _action ;
+    BaseAction* _action ;
     Event* _next ;
 };
 
