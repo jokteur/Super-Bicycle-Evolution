@@ -2,9 +2,8 @@
 #define ACTION_H
 
 #include <iostream>
+#include <memory>
 #include <string>
-
-using namespace std ;
 
 #include "creature.h"
 
@@ -12,43 +11,39 @@ class BaseAction
 {
 public:
     BaseAction() ;
-    BaseAction(Creature& actor);
+    BaseAction(std::shared_ptr<Creature> actor);
     virtual ~BaseAction();
 
-    Creature getActor(){return *_actor ;} ;
+    std::shared_ptr<Creature>& getActor(){return _actor ;} ;
 
-    Creature* getPtrToActor(){return _actor ;};
+    virtual string toString() ;
 
-    virtual string getDesc() ;
+    friend std::ostream& operator<< (std::ostream& out, BaseAction& action) ;
 
 protected:
-    Creature* _actor ;
+    std::shared_ptr<Creature> _actor ;
 };
 
 class Waiting : public BaseAction
 {
 public:
-    Waiting(Creature& waiter):BaseAction(waiter) {} ;
-    virtual string getDesc() ;
+    Waiting(){} ;
+    Waiting(std::shared_ptr<Creature> waiter):BaseAction(std::move(waiter)){} ;
+
+    virtual string toString() ;
+
 };
 
 class Attacking : public BaseAction
 {
 public:
-    Attacking(Creature& attacker, Creature& defender) ;
+    Attacking(std::shared_ptr<Creature> attacker, std::shared_ptr<Creature>& defender) ;
 
-    Creature getAttacker(){return *_actor ;} ;
-    Creature getDefender(){return *_defender;} ;
+    std::weak_ptr<Creature>& getDefender(){return _defender;} ;
 
-    Creature* getPtrToAttacker(){return _actor ;} ;
-    Creature* getPtrToDefender(){return _defender ;} ;
-
-    virtual string getDesc() ;
-
+    virtual string toString() ;
 protected:
-    Creature* _defender ;
+    std::weak_ptr<Creature> _defender ;
 };
-
-ostream& operator<< (ostream& out, BaseAction& action) ;
 
 #endif // ACTION_H

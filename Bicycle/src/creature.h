@@ -40,9 +40,7 @@ public:
     void exportCreature();
     void fct();
 
-
+    friend ostream& operator<< (ostream& out, Creature& creature) ;
 };
-
-ostream& operator<< (ostream& out, Creature& creature) ;
 
 #endif // CREATURE_H

@@ -3,19 +3,21 @@
 Event::Event()
 {   }
 
-Event::Event(global_time_t time, BaseAction& action, Event* next)
-    :_time(time), _action(&action), _next(next)
+Event::Event(global_time_t time, std::unique_ptr<BaseAction> action, std::unique_ptr<Event> next)
+    :_time(time),
+     _action(std::move(action)),
+     _next(std::move(next))
 {   }
 
-void Event::insertEventAfter(Event& newNext)
+void Event::insertEventAfter(std::unique_ptr<Event> newNext)
 {
-      newNext._next = _next ;
-      _next = &newNext ;
+      newNext->_next = std::move(_next) ;
+      _next = std::move(newNext) ;
 }
 
-ostream& operator<< (ostream& out, Event& event)
+std::ostream& operator<< (std::ostream& out, Event& event)
 {
-    out << "Event (" << &event << ") scheduling [" << event.getAction() << "] until " << event.getScheduledTime() << ". " ;
-    out << "Next event : " << event.getPtrToNext() ;
+    out << event._time << " : (" << &event << ") scheduling [" << *event._action << "]." ;
+    out << " Followed by (" << event._next.get() << ")." ;
     return out ;
 }

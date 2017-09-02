@@ -2,45 +2,43 @@
 
 #include <sstream>
 
-// Decide where to put this stuff without fucking breaking my project
-string ptrToStr(void* ptr)
-{
-    stringstream ss ;
-    ss << ptr ;
-    return ss.str() ;
-}
-
 BaseAction::BaseAction()
 {   }
 
-BaseAction::BaseAction(Creature& actor)
-    :_actor(&actor)
+BaseAction::BaseAction(std::shared_ptr<Creature> actor)
+    :_actor(std::move(actor))
 {   }
 
 BaseAction::~BaseAction()
 {   }
 
-string BaseAction::getDesc()
+string BaseAction::toString()
 {
-    return "BaseAction" ;
+    return "Base action" ;
+} ;
+
+
+string Waiting::toString()
+{
+    std::stringstream ss ;
+    ss << *_actor << ") waiting" ;
+    return ss.str() ;
 }
 
-string Waiting::getDesc()
-{
-    return "(" + ptrToStr(getPtrToActor()) + ") waiting" ;
-}
-
-Attacking::Attacking(Creature& attacker, Creature& defender)
-    :BaseAction(attacker), _defender(&defender)
+Attacking::Attacking(std::shared_ptr<Creature> attacker, std::shared_ptr<Creature>& defender)
+    :BaseAction(std::move(attacker)), _defender(defender)
 {   }
 
-string Attacking::getDesc()
+string Attacking::toString()
 {
-    return "(" + ptrToStr(getPtrToAttacker()) + ") attacking (" +  ptrToStr(getPtrToDefender()) + ")";
+    std::stringstream ss ;
+    ss << *_actor << " attacking " << *static_cast<shared_ptr<Creature>>(_defender) ;
+    return ss.str() ;
 }
 
-ostream& operator<< (ostream& out, BaseAction& action)
+std::ostream& operator<< (std::ostream& out, BaseAction& action)
 {
-    cout << action.getDesc() ;
+    cout << action.toString() ;
     return out ;
 }
+

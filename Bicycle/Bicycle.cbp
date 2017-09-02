@@ -43,7 +43,6 @@
 		<Unit filename="src/scheduler.cpp" />
 		<Unit filename="src/scheduler.h" />
 		<Unit filename="src/typedef.h" />
-		<Unit filename="src/universe.cpp" />
 		<Unit filename="src/universe.h" />
 		<Extensions>
 			<code_completion />

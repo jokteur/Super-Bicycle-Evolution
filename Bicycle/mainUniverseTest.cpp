@@ -5,23 +5,19 @@
 #include "src/creature.h"
 #include "src/event.h"
 
-using namespace std ;
-
 int main(int argc, char *argv[])
 {
-    Creature c = Creature() ;
-    Creature c2 = Creature() ;
-    Attacking attack = Attacking(c, c2) ;
-    Attacking attack2 = Attacking(c2, c) ;
-    Waiting w = Waiting(c) ;
-    Event currentEvent = Event(123, attack) ;
-    Event nextEvent = Event(10000, attack2) ;
-    Event midEvent = Event(155, w) ;
-    currentEvent.insertEventAfter(nextEvent) ;
-    currentEvent.insertEventAfter(midEvent) ;
+    auto c = std::make_shared<Creature>() ;
+    auto c1 = std::make_shared<Creature>() ;
+    auto c2 = std::make_shared<Creature>() ;
+    auto act = std::make_unique<BaseAction>() ;
+    auto attack = std::make_unique<Attacking>(std::move(c1), c2) ;
+    auto wait = std::make_unique<Waiting>(std::move(c)) ;
+    auto event = std::make_unique<Event>(123, std::move(wait)) ;
+    auto event2 = std::make_unique<Event>(223, std::move(attack)) ;
+    event->insertEventAfter(std::move(event2)) ;
+    std::cout << *event << endl ;
+    std::cout << *(event->getNextEvent()) << endl ;
 
-    cout << currentEvent << endl ;
-    cout << midEvent << endl ;
-    cout << nextEvent << endl ;
     return 0 ;
 }
