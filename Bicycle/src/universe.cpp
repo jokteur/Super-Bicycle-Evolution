@@ -7,45 +7,44 @@ Universe::Universe(float sizeX, float sizeY)
 {
     for (int i = 0 ; i < N_CREATURES ; ++i)
     {
-        Creature newCreature = Creature() ;
-        _creatures.push_back(newCreature) ;
-        Waiting initialWaiting = Waiting(newCreature) ;
-        Event initialEvent = Event(i, initialWaiting) ;
+        auto newCreature = std::make_shared<Creature>() ;
+        auto initialWaiting = std::make_unique<Waiting>(std::move(newCreature)) ;
+        auto initialEvent = std::make_unique<Event>(i, std::move(initialWaiting)) ;
         if (i == 0)
         {
-            _currentEvent = initialEvent ;
+            _currentEvent = std::move(initialEvent) ;
         }
         else
         {
-            scheduleEvent(initialEvent) ;
+            scheduleEvent(std::move(initialEvent)) ;
         }
-    }
-
-    cout << *_currentEvent << endl ;
-    Event* next = _currentEvent->getPtrToNext() ;
-    while (next != nullptr && false)
-    {
-        cout << *next << endl ;
-        next = next->getPtrToNext() ;
     }
 }
 
-void Universe::scheduleEvent(Event* newEvent)
+void Universe::scheduleEvent(std::unique_ptr<Event> newEvent)
 {
+    std::unique_ptr<Event>* prePtr = &_currentEvent ;
+    std::unique_ptr<Event>* postPtr = &(_currentEvent->getNextEvent()) ;
     global_time_t newTime = newEvent->getScheduledTime() ;
-    Event* lastEvent = _currentEvent ;
-    Event* testedEvent = _currentEvent->getPtrToNext() ;
 
-    cout << testedEvent << endl ;
-
-    if (testedEvent != nullptr)
+    while (true)
     {
-        while (newTime > testedEvent->getScheduledTime())
+        if (*postPtr == nullptr || newTime < (*postPtr)->getScheduledTime())
         {
-            lastEvent = testedEvent ;
-            testedEvent = lastEvent->getPtrToNext() ;
+            (*prePtr)->insertEventAfter(std::move(newEvent)) ;
+            break ;
         }
+        prePtr = postPtr ;
+        postPtr = &((*prePtr)->getNextEvent()) ;
     }
+}
 
-    lastEvent->insertEventAfter(newEvent) ;
+void Universe::printSchedule()
+{
+    std::unique_ptr<Event>* ptr = &_currentEvent ;
+    while (*ptr != nullptr)
+    {
+        cout << *(*ptr) << endl ;
+        ptr = &((*ptr)->getNextEvent()) ;
+    }
 }

@@ -28,7 +28,7 @@ class Waiting : public BaseAction
 {
 public:
     Waiting(){} ;
-    Waiting(std::shared_ptr<Creature> waiter):BaseAction(std::move(waiter)){} ;
+    Waiting(std::shared_ptr<Creature> waiter) ;
 
     virtual string toString() ;
 

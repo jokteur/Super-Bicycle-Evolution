@@ -2,6 +2,7 @@
 #define UNIVERSE_H
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 
 #include "creature.h"
@@ -15,12 +16,12 @@ public:
 
     global_time_t getCurrentTime(){return _currentTime ;} ;
 
-    void scheduleEvent(Event* newEvent) ;
+    void scheduleEvent(std::unique_ptr<Event> newEvent) ;
+    void printSchedule() ;
 
 private:
     global_time_t _currentTime ;
-    Event* _currentEvent ;
-    std::vector<Creature> _creatures ;
+    std::unique_ptr<Event> _currentEvent ;
 
     void initialize(uint64_t numberCreatures) ;
 };

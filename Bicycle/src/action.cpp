@@ -17,9 +17,15 @@ string BaseAction::toString()
     return "Base action" ;
 } ;
 
+Waiting::Waiting(std::shared_ptr<Creature> waiter)
+    :BaseAction(std::move(waiter))
+{
+
+}
 
 string Waiting::toString()
 {
+    // stringstream allow to use the << operator defined for Creature
     std::stringstream ss ;
     ss << *_actor << ") waiting" ;
     return ss.str() ;
@@ -31,6 +37,7 @@ Attacking::Attacking(std::shared_ptr<Creature> attacker, std::shared_ptr<Creatur
 
 string Attacking::toString()
 {
+    // stringstream allows to use the << operator defined for Creature
     std::stringstream ss ;
     ss << *_actor << " attacking " << *static_cast<shared_ptr<Creature>>(_defender) ;
     return ss.str() ;
@@ -38,6 +45,7 @@ string Attacking::toString()
 
 std::ostream& operator<< (std::ostream& out, BaseAction& action)
 {
+    // Calling toString avoids problem with subclass of BaseAction
     cout << action.toString() ;
     return out ;
 }
