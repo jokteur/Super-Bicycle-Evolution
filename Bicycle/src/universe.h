@@ -3,11 +3,15 @@
 
 #include <cstdint>
 #include <memory>
+#include <random>
 #include <vector>
 
 #include "creature.h"
 #include "event.h"
 #include "typedef.h"
+
+const uint64_t N_CREATURES = 10 ;
+const float MAX_TIME = 100 ;
 
 class Universe
 {
@@ -16,14 +20,15 @@ public:
 
     global_time_t getCurrentTime(){return _currentTime ;} ;
 
-    void scheduleEvent(std::unique_ptr<Event> newEvent) ;
     void printSchedule() ;
+    void run() ;
+    void scheduleAction(std::unique_ptr<BaseAction> newAction) ;
 
 private:
     global_time_t _currentTime ;
     std::unique_ptr<Event> _currentEvent ;
 
-    void initialize(uint64_t numberCreatures) ;
+    void init_creatures(uint64_t numberCreatures) ;
 };
 
 #endif // UNIVERSE_H

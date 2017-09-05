@@ -6,14 +6,18 @@
 #include <memory>
 
 #include "action.h"
-#include "creature.h"
 #include "typedef.h"
+
+class BaseAction ; // Needed to avoid circular reference
 
 class Event
 {
 public:
     Event() ;
-    Event(global_time_t time, std::unique_ptr<BaseAction> action, std::unique_ptr<Event> next = nullptr) ;
+    Event(global_time_t time,
+          std::unique_ptr<BaseAction> action,
+          std::unique_ptr<Event> next = nullptr) ;
+    virtual ~Event() ;
 
     // Getters
     global_time_t getScheduledTime(){return _time ;} ;
@@ -21,6 +25,7 @@ public:
     std::unique_ptr<Event>& getNextEvent(){return _next ;} ;
 
     void insertEventAfter(std::unique_ptr<Event> newNext) ;
+    void realise() {} ;
 
     friend std::ostream& operator<< (std::ostream& out, Event& event) ;
 

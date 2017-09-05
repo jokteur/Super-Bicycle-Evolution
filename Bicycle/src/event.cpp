@@ -9,6 +9,9 @@ Event::Event(global_time_t time, std::unique_ptr<BaseAction> action, std::unique
      _next(std::move(next))
 {   }
 
+Event::~Event()
+{   }
+
 void Event::insertEventAfter(std::unique_ptr<Event> newNext)
 {
       newNext->_next = std::move(_next) ;

@@ -1,30 +1,42 @@
 #include "universe.h"
-
-const int N_CREATURES = 10 ;
+#include "random.h"
 
 Universe::Universe(float sizeX, float sizeY)
     :_currentTime(0), _currentEvent(nullptr)
 {
-    for (int i = 0 ; i < N_CREATURES ; ++i)
+    Random::init() ;
+    init_creatures(N_CREATURES) ;
+}
+
+void Universe::printSchedule()
+{
+    std::unique_ptr<Event>* ptr = &_currentEvent ;
+    while (*ptr != nullptr)
     {
-        auto newCreature = std::make_shared<Creature>() ;
-        auto initialWaiting = std::make_unique<Waiting>(std::move(newCreature)) ;
-        auto initialEvent = std::make_unique<Event>(i, std::move(initialWaiting)) ;
-        if (i == 0)
-        {
-            _currentEvent = std::move(initialEvent) ;
-        }
-        else
-        {
-            scheduleEvent(std::move(initialEvent)) ;
-        }
+        cout << *(*ptr) << endl ;
+        ptr = &((*ptr)->getNextEvent()) ;
     }
 }
 
-void Universe::scheduleEvent(std::unique_ptr<Event> newEvent)
+void Universe::run()
+{
+    while (_currentEvent != nullptr and _currentTime < MAX_TIME)
+    {
+        cout << *_currentEvent << endl ;
+        _currentEvent->realise() ;
+        auto actingCreature = _currentEvent->getAction()->getActor() ;
+        _currentEvent = std::move(_currentEvent->getNextEvent()) ;
+        _currentTime = _currentEvent->getScheduledTime() ;
+        auto newAction = actingCreature->chooseAction() ;
+        scheduleAction(std::move(newAction)) ;
+    }
+}
+
+void Universe::scheduleAction(std::unique_ptr<BaseAction> newAction)
 {
     std::unique_ptr<Event>* prePtr = &_currentEvent ;
     std::unique_ptr<Event>* postPtr = &(_currentEvent->getNextEvent()) ;
+    auto newEvent = std::make_unique<Event>(newAction->getDuration() + _currentTime, std::move(newAction)) ;
     global_time_t newTime = newEvent->getScheduledTime() ;
 
     while (true)
@@ -39,12 +51,19 @@ void Universe::scheduleEvent(std::unique_ptr<Event> newEvent)
     }
 }
 
-void Universe::printSchedule()
+void Universe::init_creatures(uint64_t numberCreatures)
 {
-    std::unique_ptr<Event>* ptr = &_currentEvent ;
-    while (*ptr != nullptr)
+    for (int i = 0 ; i < numberCreatures ; ++i)
     {
-        cout << *(*ptr) << endl ;
-        ptr = &((*ptr)->getNextEvent()) ;
+        auto newCreature = std::make_shared<Creature>() ;
+        auto initialWaiting = std::make_unique<Waiting>(std::move(newCreature), i) ;
+        if (i == 0)
+        {
+            _currentEvent = std::make_unique<Event>(i, std::move(initialWaiting)) ;
+        }
+        else
+        {
+            scheduleAction(std::move(initialWaiting)) ;
+        }
     }
 }

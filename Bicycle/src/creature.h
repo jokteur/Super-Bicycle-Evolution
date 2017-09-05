@@ -3,11 +3,16 @@
 
 #include <cstdint>
 #include <iostream>
+#include <memory>
 
 #include "ANN.h"
+#include "action.h"
 #include "typedef.h"
 
+class BaseAction ; // Needed to avoid circular reference
+
 class Creature
+    : public std::enable_shared_from_this<Creature>
 {
 
 private:
@@ -30,7 +35,7 @@ private:
 
 public:
     Creature();
-    ~Creature();
+    virtual ~Creature();
 
     void update();
     void die();
@@ -39,6 +44,8 @@ public:
     void reproduce();
     void exportCreature();
     void fct();
+
+    std::unique_ptr<BaseAction> chooseAction() ;
 
     friend ostream& operator<< (ostream& out, Creature& creature) ;
 };
