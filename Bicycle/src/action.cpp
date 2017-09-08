@@ -2,12 +2,15 @@
 
 #include <sstream>
 
+// Initialization of static vectors
+std::vector<std::function<BaseAction*()>> BaseAction::_actionConstructors ;
+std::vector<std::string> BaseAction::_actionNames ;
+
 BaseAction::BaseAction()
 {   }
 
-BaseAction::BaseAction(std::shared_ptr<Creature> actor,
-                       global_time_t duration)
-    :_actor(std::move(actor)), _duration(duration)
+BaseAction::BaseAction(ActionParams ap)
+    : _duration(ap.duration), _actor(std::move(ap.actor)), _target(ap.target)
 {   }
 
 BaseAction::~BaseAction()
@@ -18,9 +21,17 @@ string BaseAction::toString()
     return "Base action" ;
 } ;
 
-Waiting::Waiting(std::shared_ptr<Creature> actor, global_time_t duration)
-    :BaseAction(std::move(actor), duration)
-{   }
+std::unique_ptr<BaseAction> createAction(int id)
+{
+    std::unique_ptr<BaseAction> newptr(BaseAction::_actionConstructors[id]()) ;
+    return newptr ;
+}
+
+void BaseAction::registerAction(std::string name, std::function<BaseAction*()> constructor)
+{
+    BaseAction::_actionNames.push_back(name) ;
+    BaseAction::_actionConstructors.push_back(constructor) ;
+}
 
 string Waiting::toString()
 {
@@ -30,23 +41,13 @@ string Waiting::toString()
     return ss.str() ;
 }
 
-Attacking::Attacking(std::shared_ptr<Creature> attacker,
-                     std::shared_ptr<Creature>& defender,
-                     global_time_t duration)
-    :BaseAction(std::move(attacker), duration), _defender(defender)
-{   }
-
 string Attacking::toString()
 {
     // stringstream allows to use the << operator defined for Creature
     std::stringstream ss ;
-    ss << *_actor << " attacking " << *static_cast<shared_ptr<Creature>>(_defender) ;
+    ss << *_actor << " attacking " << *static_cast<shared_ptr<Creature>>(_target) ;
     return ss.str() ;
 }
-
-Moving::Moving(std::shared_ptr<Creature> actor, global_time_t duration)
-    :BaseAction(std::move(actor), duration)
-{   }
 
 string Moving::toString()
 {

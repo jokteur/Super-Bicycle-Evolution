@@ -3,7 +3,7 @@
 Event::Event()
 {   }
 
-Event::Event(global_time_t time, std::unique_ptr<BaseAction> action, std::unique_ptr<Event> next)
+Event::Event(time_unit_t time, std::unique_ptr<BaseAction> action, std::unique_ptr<Event> next)
     :_time(time),
      _action(std::move(action)),
      _next(std::move(next))

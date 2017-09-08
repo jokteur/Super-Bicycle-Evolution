@@ -14,13 +14,13 @@ class Event
 {
 public:
     Event() ;
-    Event(global_time_t time,
+    Event(time_unit_t time,
           std::unique_ptr<BaseAction> action,
           std::unique_ptr<Event> next = nullptr) ;
     virtual ~Event() ;
 
     // Getters
-    global_time_t getScheduledTime(){return _time ;} ;
+    time_unit_t getScheduledTime(){return _time ;} ;
     std::unique_ptr<BaseAction>& getAction(){return _action ;} ;
     std::unique_ptr<Event>& getNextEvent(){return _next ;} ;
 
@@ -30,7 +30,7 @@ public:
     friend std::ostream& operator<< (std::ostream& out, Event& event) ;
 
 private:
-    global_time_t _time ;
+    time_unit_t _time ;
     std::unique_ptr<BaseAction> _action ;
     std::unique_ptr<Event> _next ;
 };

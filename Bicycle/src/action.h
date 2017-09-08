@@ -4,22 +4,42 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "creature.h"
 #include "typedef.h"
 
-class Creature ; // Needed to avoid circular reference
+// Needed to avoid circular reference
+class Creature ;
+
+#define REGISTER(ACT) \
+    ACT(){} ; \
+    ACT(ActionParams ap) \
+        :BaseAction(ap)\
+    { \
+        static bool registered = false ; \
+        if (!registered){registerSelf() ; registered = true ;} \
+    }; \
+    static ACT* instanciate(){return new ACT() ;} ; \
+    virtual void registerSelf(){BaseAction::registerAction(#ACT, ACT::instanciate) ;} ;
+
+
+struct ActionParams
+{
+    time_unit_t duration = 0 ;
+    std::shared_ptr<Creature> actor ;
+    std::weak_ptr<Creature> target ;
+};
 
 class BaseAction
 {
 public:
     BaseAction() ;
-    BaseAction(std::shared_ptr<Creature> actor,
-               global_time_t duration);
+    BaseAction(ActionParams ap);
     virtual ~BaseAction();
 
     std::shared_ptr<Creature>& getActor(){return _actor ;} ;
-    global_time_t getDuration(){return _duration ;} ;
+    time_unit_t getDuration(){return _duration ;} ;
 
     // Method called when the event is added to the schedule
     virtual void preprocess(){} ;
@@ -29,50 +49,46 @@ public:
 
     friend std::ostream& operator<< (std::ostream& out, BaseAction& action) ;
 
+    // Factory Methods
+    static std::unique_ptr<BaseAction> createAction(int id) ;
+    static void registerAction(std::string name, std::function<BaseAction*()> constructor) ;
+
+    static std::vector<std::function<BaseAction*()>> _actionConstructors ;
+    static std::vector<std::string> _actionNames ;
+
 protected:
+    time_unit_t _duration ;
     std::shared_ptr<Creature> _actor ;
-    global_time_t _duration ;
+    std::weak_ptr<Creature> _target ;
+
+    virtual void registerSelf(){} ;
 };
+
 
 class Waiting : public BaseAction
 {
 public:
-    Waiting(std::shared_ptr<Creature> actor,
-            global_time_t duration);
-
     virtual string toString() ;
 
+    REGISTER(Waiting)
 };
 
 class Attacking : public BaseAction
 {
 public:
-    Attacking(std::shared_ptr<Creature> attacker,
-              std::shared_ptr<Creature>& defender,
-              global_time_t duration) ;
-
-    std::weak_ptr<Creature>& getDefender(){return _defender;} ;
-
     virtual string toString() ;
-protected:
-    std::weak_ptr<Creature> _defender ;
+
+    REGISTER(Attacking)
 };
+
 
 class Moving : public BaseAction
 {
 public:
-    Moving(std::shared_ptr<Creature> actor,
-           global_time_t duration) ;
-
     virtual string toString() ;
+
+    REGISTER(Moving)
 };
 
-enum ActionType
-{
-    WAITING,
-    ATTACKING,
-    MOVING,
-    N_ACTION_TYPES
-};
 
 #endif // ACTION_H

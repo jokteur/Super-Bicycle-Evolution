@@ -42,6 +42,8 @@
 		<Unit filename="src/event.cpp" />
 		<Unit filename="src/event.h" />
 		<Unit filename="src/exception.h" />
+		<Unit filename="src/random.cpp" />
+		<Unit filename="src/random.h" />
 		<Unit filename="src/scheduler.cpp" />
 		<Unit filename="src/scheduler.h" />
 		<Unit filename="src/typedef.h" />

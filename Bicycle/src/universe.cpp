@@ -37,7 +37,7 @@ void Universe::scheduleAction(std::unique_ptr<BaseAction> newAction)
     std::unique_ptr<Event>* prePtr = &_currentEvent ;
     std::unique_ptr<Event>* postPtr = &(_currentEvent->getNextEvent()) ;
     auto newEvent = std::make_unique<Event>(newAction->getDuration() + _currentTime, std::move(newAction)) ;
-    global_time_t newTime = newEvent->getScheduledTime() ;
+    time_unit_t newTime = newEvent->getScheduledTime() ;
 
     while (true)
     {
@@ -53,10 +53,13 @@ void Universe::scheduleAction(std::unique_ptr<BaseAction> newAction)
 
 void Universe::init_creatures(uint64_t numberCreatures)
 {
-    for (int i = 0 ; i < numberCreatures ; ++i)
+    for (uint64_t i = 0 ; i < numberCreatures ; ++i)
     {
         auto newCreature = std::make_shared<Creature>() ;
-        auto initialWaiting = std::make_unique<Waiting>(std::move(newCreature), i) ;
+        ActionParams ap ;
+        ap.duration = i ;
+        ap.actor = newCreature ;
+        auto initialWaiting = std::make_unique<Waiting>(ap) ;
         if (i == 0)
         {
             _currentEvent = std::make_unique<Event>(i, std::move(initialWaiting)) ;

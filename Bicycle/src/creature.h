@@ -30,7 +30,7 @@ private:
     float _HP;
 
     //Other parameters
-    global_time_t _lastActionTime;
+    time_unit_t _lastActionTime;
     ANN *_brain;
 
 public:

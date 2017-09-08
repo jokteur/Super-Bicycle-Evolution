@@ -11,21 +11,21 @@
 #include "typedef.h"
 
 const uint64_t N_CREATURES = 10 ;
-const float MAX_TIME = 100 ;
+const float MAX_TIME = 30 ;
 
 class Universe
 {
 public:
     Universe(float sizeX, float sizeY) ;
 
-    global_time_t getCurrentTime(){return _currentTime ;} ;
+    time_unit_t getCurrentTime(){return _currentTime ;} ;
 
     void printSchedule() ;
     void run() ;
     void scheduleAction(std::unique_ptr<BaseAction> newAction) ;
 
 private:
-    global_time_t _currentTime ;
+    time_unit_t _currentTime ;
     std::unique_ptr<Event> _currentEvent ;
 
     void init_creatures(uint64_t numberCreatures) ;
