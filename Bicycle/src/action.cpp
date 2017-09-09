@@ -3,35 +3,43 @@
 #include <sstream>
 
 // Initialization of static vectors
-std::vector<std::function<BaseAction*()>> BaseAction::_actionConstructors ;
+std::vector<std::function<BaseAction*(ActionParams)>> BaseAction::_actionConstructors ;
 std::vector<std::string> BaseAction::_actionNames ;
+
+ActionConstructor::ActionConstructor(std::string name,
+                                     std::function<BaseAction*(ActionParams)> constructor,
+                                     std::vector<std::string> caracNames)
+{
+    BaseAction::_actionNames.push_back(name) ;
+    BaseAction::_actionConstructors.push_back(constructor) ;
+}
+
 
 BaseAction::BaseAction()
 {   }
+
 
 BaseAction::BaseAction(ActionParams ap)
     : _duration(ap.duration), _actor(std::move(ap.actor)), _target(ap.target)
 {   }
 
+
 BaseAction::~BaseAction()
 {   }
+
 
 string BaseAction::toString()
 {
     return "Base action" ;
 } ;
 
-std::unique_ptr<BaseAction> createAction(int id)
+
+std::unique_ptr<BaseAction> BaseAction::createAction(int id, ActionParams ap)
 {
-    std::unique_ptr<BaseAction> newptr(BaseAction::_actionConstructors[id]()) ;
+    std::unique_ptr<BaseAction> newptr(BaseAction::_actionConstructors[id](ap)) ;
     return newptr ;
 }
 
-void BaseAction::registerAction(std::string name, std::function<BaseAction*()> constructor)
-{
-    BaseAction::_actionNames.push_back(name) ;
-    BaseAction::_actionConstructors.push_back(constructor) ;
-}
 
 string Waiting::toString()
 {

@@ -48,7 +48,8 @@ std::unique_ptr<BaseAction> Creature::chooseAction()
     ActionParams ap ;
     ap.duration = 10 ;
     ap.actor = std::move(shared_from_this()) ;
-    return make_unique<Moving>(ap) ;
+    ap.target = shared_from_this() ;
+    return BaseAction::createAction(Random::D3(), ap) ;
 }
 
 ostream& operator<< (ostream& out, Creature& creature)
