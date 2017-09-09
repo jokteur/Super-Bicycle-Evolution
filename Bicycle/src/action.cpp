@@ -6,14 +6,6 @@
 std::vector<std::function<BaseAction*(ActionParams)>> BaseAction::_actionConstructors ;
 std::vector<std::string> BaseAction::_actionNames ;
 
-ActionConstructor::ActionConstructor(std::string name,
-                                     std::function<BaseAction*(ActionParams)> constructor,
-                                     std::vector<std::string> caracNames)
-{
-    BaseAction::_actionNames.push_back(name) ;
-    BaseAction::_actionConstructors.push_back(constructor) ;
-}
-
 
 BaseAction::BaseAction()
 {   }
@@ -33,6 +25,15 @@ string BaseAction::toString()
     return "Base action" ;
 } ;
 
+
+bool BaseAction::registerAction(std::string name,
+                                std::function<BaseAction*(ActionParams)> constructor,
+                                std::vector<std::string>)
+{
+    BaseAction::_actionNames.push_back(name) ;
+    BaseAction::_actionConstructors.push_back(constructor) ;
+    return true ;
+}
 
 std::unique_ptr<BaseAction> BaseAction::createAction(int id, ActionParams ap)
 {

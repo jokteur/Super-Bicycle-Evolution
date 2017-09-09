@@ -13,36 +13,30 @@
 class BaseAction ;
 class Creature ;
 
-#define COMPLETE_ACTION(ACT) \
+#define ACTION_CLASS(ACT, ...) \
+class ACT : public BaseAction \
+{ \
 public: \
     ACT(){} ; \
     ACT(ActionParams ap):BaseAction(ap){}; \
+    virtual string toString() ; \
     static ACT* instanciate(ActionParams ap){return new ACT(ap) ;} ; \
-
-#define REQUIRE_CARACS(...) \
-public: \
+    static bool _registered ; \
     static std::vector<std::string> getRequiredCaracs()\
     { \
         std::vector<std::string> reqFields = {__VA_ARGS__} ; \
         return reqFields ; \
-    };
+    }; \
+};
 
 #define REGISTER_ACTION(ACT) \
-ActionConstructor AC##ACT(#ACT, ACT::instanciate, ACT::getRequiredCaracs()) ;
+bool ACT::_registered = BaseAction::registerAction(#ACT, ACT::instanciate, ACT::getRequiredCaracs()) ;
 
 struct ActionParams
 {
     time_unit_t duration = 0 ;
     std::shared_ptr<Creature> actor ;
     std::weak_ptr<Creature> target ;
-};
-
-class ActionConstructor
-{
-public:
-    ActionConstructor(std::string name,
-                      std::function<BaseAction*(ActionParams)> constructor,
-                      std::vector<std::string>) ;
 };
 
 class BaseAction
@@ -64,6 +58,9 @@ public:
     friend std::ostream& operator<< (std::ostream& out, BaseAction& action) ;
 
     // Factory Methods
+    static bool registerAction(std::string name,
+                               std::function<BaseAction*(ActionParams)> constructor,
+                               std::vector<std::string>) ;
     static std::unique_ptr<BaseAction> createAction(int id, ActionParams ap) ;
 
     static std::vector<std::function<BaseAction*(ActionParams)>> _actionConstructors ;
@@ -76,33 +73,8 @@ protected:
 };
 
 
-class Waiting : public BaseAction
-{
-public:
-    virtual string toString() ;
-
-    COMPLETE_ACTION(Waiting)
-    REQUIRE_CARACS()
-};
-
-class Attacking : public BaseAction
-{
-public:
-    virtual string toString() ;
-
-    COMPLETE_ACTION(Attacking)
-    REQUIRE_CARACS("attack")
-};
-
-
-class Moving : public BaseAction
-{
-public:
-    virtual string toString() ;
-
-    COMPLETE_ACTION(Moving)
-    REQUIRE_CARACS("linearSpeed")
-};
-
+ACTION_CLASS(Waiting)
+ACTION_CLASS(Attacking, "attack")
+ACTION_CLASS(Moving, "linearSpeed")
 
 #endif // ACTION_H
