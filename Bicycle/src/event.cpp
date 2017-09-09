@@ -20,7 +20,9 @@ void Event::insertEventAfter(std::unique_ptr<Event> newNext)
 
 std::ostream& operator<< (std::ostream& out, Event& event)
 {
-    out << event._time << " : (" << &event << ") scheduling [" << *event._action << "]." ;
-    out << " Followed by (" << event._next.get() << ")." ;
+    std::string tab = "    " ;
+    out << event._time << " : (" << &event << ") scheduling" << endl ;
+    out << tab << *event._action << endl ;
+    out << tab << "Followed by (" << event._next.get() << ")." << endl ;
     return out ;
 }

@@ -18,6 +18,7 @@ void Universe::printSchedule()
     }
 }
 
+
 void Universe::run()
 {
     while (_currentEvent != nullptr and _currentTime < MAX_TIME)
@@ -31,6 +32,7 @@ void Universe::run()
         scheduleAction(std::move(newAction)) ;
     }
 }
+
 
 void Universe::scheduleAction(std::unique_ptr<BaseAction> newAction)
 {
@@ -50,6 +52,7 @@ void Universe::scheduleAction(std::unique_ptr<BaseAction> newAction)
         postPtr = &((*prePtr)->getNextEvent()) ;
     }
 }
+
 
 void Universe::init_creatures(uint64_t numberCreatures)
 {

@@ -25,7 +25,7 @@ public:
     std::unique_ptr<Event>& getNextEvent(){return _next ;} ;
 
     void insertEventAfter(std::unique_ptr<Event> newNext) ;
-    void realise() {} ;
+    void realise() {_action->enact() ;} ;
 
     friend std::ostream& operator<< (std::ostream& out, Event& event) ;
 

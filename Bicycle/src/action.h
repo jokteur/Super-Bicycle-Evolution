@@ -19,10 +19,12 @@ class ACT : public BaseAction \
 public: \
     ACT(){} ; \
     ACT(ActionParams ap):BaseAction(ap){}; \
-    virtual string toString() ; \
+    virtual std::string toString() ; \
+    virtual void preprocess() ; \
+    virtual void enact() ; \
     static ACT* instanciate(ActionParams ap){return new ACT(ap) ;} ; \
     static bool _registered ; \
-    static std::vector<std::string> getRequiredCaracs()\
+    static std::vector<std::string> getRequiredCaracs() \
     { \
         std::vector<std::string> reqFields = {__VA_ARGS__} ; \
         return reqFields ; \
@@ -60,7 +62,7 @@ public:
     // Factory Methods
     static bool registerAction(std::string name,
                                std::function<BaseAction*(ActionParams)> constructor,
-                               std::vector<std::string>) ;
+                               std::vector<std::string> requiredCaracs) ;
     static std::unique_ptr<BaseAction> createAction(int id, ActionParams ap) ;
 
     static std::vector<std::function<BaseAction*(ActionParams)>> _actionConstructors ;

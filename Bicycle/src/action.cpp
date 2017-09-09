@@ -7,8 +7,7 @@ std::vector<std::function<BaseAction*(ActionParams)>> BaseAction::_actionConstru
 std::vector<std::string> BaseAction::_actionNames ;
 
 
-BaseAction::BaseAction()
-{   }
+BaseAction::BaseAction(){}
 
 
 BaseAction::BaseAction(ActionParams ap)
@@ -16,11 +15,10 @@ BaseAction::BaseAction(ActionParams ap)
 {   }
 
 
-BaseAction::~BaseAction()
-{   }
+BaseAction::~BaseAction(){}
 
 
-string BaseAction::toString()
+std::string BaseAction::toString()
 {
     return "Base action" ;
 } ;
@@ -28,12 +26,15 @@ string BaseAction::toString()
 
 bool BaseAction::registerAction(std::string name,
                                 std::function<BaseAction*(ActionParams)> constructor,
-                                std::vector<std::string>)
+                                std::vector<std::string> requiredCaracs)
 {
     BaseAction::_actionNames.push_back(name) ;
     BaseAction::_actionConstructors.push_back(constructor) ;
+    for (auto name : requiredCaracs)
+        Creature::addCarac(name) ;
     return true ;
 }
+
 
 std::unique_ptr<BaseAction> BaseAction::createAction(int id, ActionParams ap)
 {
@@ -42,15 +43,36 @@ std::unique_ptr<BaseAction> BaseAction::createAction(int id, ActionParams ap)
 }
 
 
-string Waiting::toString()
+std::ostream& operator<< (std::ostream& out, BaseAction& action)
+{
+    // Calling toString avoids problem with subclass of BaseAction
+    cout << action.toString() ;
+    return out ;
+}
+
+
+
+std::string Waiting::toString()
 {
     // stringstream allow to use the << operator defined for Creature
     std::stringstream ss ;
-    ss << *_actor << ") waiting" ;
+    ss << *_actor << " waiting" ;
     return ss.str() ;
 }
 
-string Attacking::toString()
+void Waiting::preprocess()
+{
+
+}
+
+
+void Waiting::enact()
+{
+
+}
+
+
+std::string Attacking::toString()
 {
     // stringstream allows to use the << operator defined for Creature
     std::stringstream ss ;
@@ -58,7 +80,20 @@ string Attacking::toString()
     return ss.str() ;
 }
 
-string Moving::toString()
+
+void Attacking::preprocess()
+{
+
+}
+
+
+void Attacking::enact()
+{
+
+}
+
+
+std::string Moving::toString()
 {
     // stringstream allows to use the << operator defined for Creature
     std::stringstream ss ;
@@ -66,10 +101,16 @@ string Moving::toString()
     return ss.str() ;
 }
 
-std::ostream& operator<< (std::ostream& out, BaseAction& action)
+
+void Moving::preprocess()
 {
-    // Calling toString avoids problem with subclass of BaseAction
-    cout << action.toString() ;
-    return out ;
+
+}
+
+
+void Moving::enact()
+{
+    Vector2f diff = _actor->getCarac("linearSpeed")*_duration*_actor->getDir() ;
+    _actor->setPos(_actor->getPos() + diff) ;
 }
 

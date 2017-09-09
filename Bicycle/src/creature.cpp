@@ -2,9 +2,16 @@
 
 #include "random.h"
 
+
+std::vector<std::string> Creature::_paramNames ;
+
 Creature::Creature()
 {
+    _Pos.setRandom() ;
+    _Dir.setRandom() ;
 
+    for (auto name : Creature::_paramNames)
+        _actionParams[name] = 1 ;
 }
 
 //Destructor
@@ -42,6 +49,18 @@ void Creature::exportCreature()
 {
 
 }
+
+void Creature::addCarac(std::string name)
+{
+    Creature::_paramNames.push_back(name) ;
+}
+
+
+float Creature::getCarac(std::string name)
+{
+    return _actionParams[name] ;
+}
+
 
 std::unique_ptr<BaseAction> Creature::chooseAction()
 {
