@@ -3,15 +3,15 @@
 #include "random.h"
 
 
-std::vector<std::string> Creature::_paramNames ;
+std::vector<std::string> Creature::_caracNames ;
 
 Creature::Creature()
 {
     _Pos.setRandom() ;
-    _Dir.setRandom() ;
+    _Dir.setRandom() ; // TODO Normalize to 1
 
-    for (auto name : Creature::_paramNames)
-        _actionParams[name] = 1 ;
+    for (auto name : Creature::_caracNames)
+        _caracs[name] = 1 ; // TODO Randomize the initialization
 }
 
 //Destructor
@@ -52,23 +52,27 @@ void Creature::exportCreature()
 
 void Creature::addCarac(std::string name)
 {
-    Creature::_paramNames.push_back(name) ;
+    Creature::_caracNames.push_back(name) ;
 }
 
 
 float Creature::getCarac(std::string name)
 {
-    return _actionParams[name] ;
+    return _caracs[name] ;
 }
 
+/*  Return the action chosen by the creature
 
+    Actually simply chose one randomly and put a duration of 10 for it.
+    Also the target of an action is always itself.
+*/
 std::unique_ptr<BaseAction> Creature::chooseAction()
 {
     ActionParams ap ;
     ap.duration = 10 ;
     ap.actor = std::move(shared_from_this()) ;
     ap.target = shared_from_this() ;
-    return BaseAction::createAction(Random::D3(), ap) ;
+    return BaseAction::createAction(Random::D6(), ap) ;
 }
 
 ostream& operator<< (ostream& out, Creature& creature)

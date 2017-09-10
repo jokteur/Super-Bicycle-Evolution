@@ -20,7 +20,7 @@ BaseAction::~BaseAction(){}
 
 std::string BaseAction::toString()
 {
-    return "Base action" ;
+    return "Base action [SHOULD NOT BE INSTANCIATED !]" ;
 } ;
 
 
@@ -45,11 +45,10 @@ std::unique_ptr<BaseAction> BaseAction::createAction(int id, ActionParams ap)
 
 std::ostream& operator<< (std::ostream& out, BaseAction& action)
 {
-    // Calling toString avoids problem with subclass of BaseAction
+    // Calling toString allow to define the method once for all actions
     cout << action.toString() ;
     return out ;
 }
-
 
 
 std::string Waiting::toString()
@@ -97,7 +96,7 @@ std::string Moving::toString()
 {
     // stringstream allows to use the << operator defined for Creature
     std::stringstream ss ;
-    ss << *_actor << " moving to 'some position'" ;
+    ss << *_actor << " moving forward" ;
     return ss.str() ;
 }
 
@@ -112,5 +111,65 @@ void Moving::enact()
 {
     Vector2f diff = _actor->getCarac("linearSpeed")*_duration*_actor->getDir() ;
     _actor->setPos(_actor->getPos() + diff) ;
+}
+
+std::string Turning::toString()
+{
+    // stringstream allows to use the << operator defined for Creature
+    std::stringstream ss ;
+    ss << *_actor << " turning" ;
+    return ss.str() ;
+}
+
+
+void Turning::preprocess()
+{
+
+}
+
+
+void Turning::enact()
+{
+
+}
+
+std::string Eating::toString()
+{
+    // stringstream allows to use the << operator defined for Creature
+    std::stringstream ss ;
+    ss << *_actor << " eating apples" ;
+    return ss.str() ;
+}
+
+
+void Eating::preprocess()
+{
+
+}
+
+
+void Eating::enact()
+{
+
+}
+
+std::string Cloning::toString()
+{
+    // stringstream allows to use the << operator defined for Creature
+    std::stringstream ss ;
+    ss << *_actor << " cloning itself" ;
+    return ss.str() ;
+}
+
+
+void Cloning::preprocess()
+{
+
+}
+
+
+void Cloning::enact()
+{
+
 }
 

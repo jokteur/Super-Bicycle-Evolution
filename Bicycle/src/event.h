@@ -10,10 +10,14 @@
 
 class BaseAction ; // Needed to avoid circular reference
 
+/*  Event class
+
+    An event represents the end of an action.
+*/
 class Event
 {
 public:
-    Event() ;
+    Event() ; // Empty constructor for uninitialized smart pointer.
     Event(time_unit_t time,
           std::unique_ptr<BaseAction> action,
           std::unique_ptr<Event> next = nullptr) ;

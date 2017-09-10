@@ -10,8 +10,10 @@
 #include "event.h"
 #include "typedef.h"
 
+// Number of creature at the beginning of a simulation
 const uint64_t N_CREATURES = 10 ;
-const float MAX_TIME = 30 ;
+// Simulation stops when this time is reached
+const time_unit_t MAX_TIME = 30 ;
 
 class Universe
 {
@@ -20,6 +22,7 @@ public:
 
     time_unit_t getCurrentTime(){return _currentTime ;} ;
 
+    // Print all scheduled events
     void printSchedule() ;
     void run() ;
     void scheduleAction(std::unique_ptr<BaseAction> newAction) ;

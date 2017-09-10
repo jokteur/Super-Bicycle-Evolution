@@ -10,6 +10,7 @@ Universe::Universe(float sizeX, float sizeY)
 
 void Universe::printSchedule()
 {
+    // We use pointer to unique_ptr since we do not want to move the unique_ptr
     std::unique_ptr<Event>* ptr = &_currentEvent ;
     while (*ptr != nullptr)
     {
@@ -25,9 +26,9 @@ void Universe::run()
     {
         cout << *_currentEvent << endl ;
         _currentEvent->realise() ;
-        auto actingCreature = _currentEvent->getAction()->getActor() ;
         _currentEvent = std::move(_currentEvent->getNextEvent()) ;
         _currentTime = _currentEvent->getScheduledTime() ;
+        auto actingCreature = _currentEvent->getAction()->getActor() ;
         auto newAction = actingCreature->chooseAction() ;
         scheduleAction(std::move(newAction)) ;
     }
@@ -36,6 +37,7 @@ void Universe::run()
 
 void Universe::scheduleAction(std::unique_ptr<BaseAction> newAction)
 {
+    // Use of pointer to unique_ptr because moving unique_ptr them is scary.
     std::unique_ptr<Event>* prePtr = &_currentEvent ;
     std::unique_ptr<Event>* postPtr = &(_currentEvent->getNextEvent()) ;
     auto newEvent = std::make_unique<Event>(newAction->getDuration() + _currentTime, std::move(newAction)) ;
@@ -62,6 +64,7 @@ void Universe::init_creatures(uint64_t numberCreatures)
         ActionParams ap ;
         ap.duration = i ;
         ap.actor = newCreature ;
+        // All creatures are start by waiting
         auto initialWaiting = std::make_unique<Waiting>(ap) ;
         if (i == 0)
         {
