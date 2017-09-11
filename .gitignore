@@ -1,5 +1,8 @@
 
 GitIgnore/
+Bicycle/bin/
+Bicycle/obj/
+Bicycle/include/
 
 # Codeblocks project file
 */*.cbd

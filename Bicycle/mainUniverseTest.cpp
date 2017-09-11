@@ -6,7 +6,6 @@
 #include <memory>
 #include <iostream>
 
-
 REGISTER_ACTION(Waiting)
 REGISTER_ACTION(Moving)
 REGISTER_ACTION(Attacking)
@@ -16,6 +15,7 @@ REGISTER_ACTION(Cloning)
 
 int main(int argc, char *argv[])
 {
+    std::vector<std::string> hello = {"as", "as"};
     Universe universe = Universe(100, 100) ;
     universe.run() ;
 
