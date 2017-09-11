@@ -7,3 +7,5 @@ Bicycle/include/
 # Codeblocks project file
 */*.cbd
 */*.depend
+*/*.layout
+*/*.save-failed
