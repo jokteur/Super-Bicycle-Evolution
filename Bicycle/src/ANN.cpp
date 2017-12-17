@@ -91,12 +91,12 @@ void ANN::displayNetwork()
 }
 
 // define a custom template unary functor
-template<typename Object>
-struct CwiseClampOp {
-	CwiseClampOp(const Object& distr, const Object& generator) : _distr(distr), _generator(generator) {}
-	const Object operator()(const float& x) const { return x<m_inf ? m_inf : (x>m_sup ? m_sup : x); }
-	Object _distr, _generator;
-};
+// template<typename Object>
+// struct CwiseClampOp {
+	// CwiseClampOp(const Object& distr, const Object& generator) : _distr(distr), _generator(generator) {}
+	// const Object operator()(const float& x) const { return x<m_inf ? m_inf : (x>m_sup ? m_sup : x); }
+	// Object _distr, _generator;
+// };
 
 void ANN::mutate(float sigma)
 {
